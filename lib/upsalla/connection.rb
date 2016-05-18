@@ -1,0 +1,42 @@
+module Upsalla
+  class Connection
+    require "rest-client"
+
+    TEST_URL = "https://wwwcie.ups.com"
+    PRODUCTION_URL = "https://onlinetools.ups.com"
+
+    attr_accessor :api_url, :access_type
+
+    def initialize(options = {})
+      self.access_type = options[:access_type] || :test
+      self.api_url = self.class._api_url_for_access_type access_type
+    end
+
+    Upsalla.registered_apis.each do |api|
+
+    end
+
+    class << self
+      def api_credentials
+        credential_names = %i[api_key api_user api_password]
+
+        mapped_credentials = credential_names.map do |credential_name|
+          [credential_name, Upsalla.send(credential_name)]
+        end
+
+        Hash[mapped_credentials]
+      end
+
+      def _api_url_for_access_type(access_type)
+        case access_type
+        when "test", :test
+          TEST_URL
+        when "production", :production
+          PRODUCTION_URL
+        else
+          fail ArgumentError, ":#{access_type} is not a valid access type"
+        end
+      end
+    end
+  end
+end
