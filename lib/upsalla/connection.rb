@@ -16,8 +16,10 @@ module Upsalla
 
     def init_connector_methods
       Upsalla.registered_apis.each do |method_name, connector|
-        define_method method_name do |payload|
-          connector.request payload, api_url
+        class << self
+          define_method method_name do |payload|
+            connector.request payload, api_url
+          end
         end
       end
     end
