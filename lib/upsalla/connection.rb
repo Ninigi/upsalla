@@ -5,20 +5,23 @@ module Upsalla
     TEST_URL = "https://wwwcie.ups.com".freeze
     PRODUCTION_URL = "https://onlinetools.ups.com".freeze
 
-    attr_accessor :api_url, :access_type
+    attr_accessor :api_url, :access_type, :options
 
     def initialize(options = {})
-      self.access_type = options[:access_type] || :test
+      self.access_type = options.delete(:access_type) || :test
       self.api_url = self.class._api_url_for_access_type access_type
+      self.options = options
 
       _init_connector_methods
     end
 
     def _init_connector_methods
       class << self
-        Upsalla.registered_apis.each do |method_name, connector|
+        Upsalla.registered_apis.each do |method_name, connector_class|
           define_method method_name do |payload|
-            connector.request payload, api_url
+            connector = connector_class.new options
+
+            connector.request api_url, payload
           end
         end
       end
@@ -26,13 +29,11 @@ module Upsalla
 
     class << self
       def api_credentials
-        credential_names = %i[api_key api_user api_password]
+        Upsalla.api_credentials
+      end
 
-        mapped_credentials = credential_names.map do |credential_name|
-          [credential_name, Upsalla.send(credential_name)]
-        end
-
-        Hash[mapped_credentials]
+      def api_credentials_xml
+        CredentialParser.parse api_credentials
       end
 
       def _api_url_for_access_type(access_type)

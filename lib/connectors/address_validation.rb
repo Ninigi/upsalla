@@ -3,18 +3,21 @@ module Upsalla
     class AddressValidation
       require "rest-client"
 
-      @api_uri = "ups.app/xml/AV"
+      attr_accessor :api_uri, :verify_ssl
 
-      class << self
-        attr_accessor :api_uri
+      def initialize(options = {})
+        self.api_uri = options[:address_validation_url] || "ups.app/xml/AV"
+        self.verify_ssl = options[:verify_ssl].nil? ? true : options[:validate_ssl]
 
-        def request(base_url, payload = {})
-          credentials_xml = XMLParser.parse Connection.api_credentials
-          payload_xml = XMLParser.parse payload
-          uri = [base_url, self.class.api_uri].join "/"
+      end
 
-          RestClient.post uri, [credentials_xml, payload_xml].join
-        end
+      def request(base_url, payload = {})
+        credentials_xml = Connection.api_credentials_xml
+        payload_xml = XMLParser.parse payload
+        url = [base_url, api_uri].join "/"
+        payload = [credentials_xml, payload_xml].join
+
+        RestClient::Request.execute method: :post, url: url, payload: payload, verify_ssl: verify_ssl
       end
     end
   end
