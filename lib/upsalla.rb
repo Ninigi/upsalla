@@ -2,16 +2,18 @@ require "upsalla/version"
 
 require "upsalla/connection"
 
-module Upsalla
-  DEFAULT_APIS = {
-    address_validation: ::AddressValidation
-  }
+require "connectors/address_validation"
 
+require "parsers/xml_parser"
+
+module Upsalla
   @api_key = ""
   @api_user = ""
   @api_password = ""
 
-  @registered_apis = DEFAULT_APIS
+  @registered_apis = {
+    address_validation: Connectors::AddressValidation
+  }
 
   class << self
     attr_accessor :api_key, :api_user, :api_password, :registered_apis

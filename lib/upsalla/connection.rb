@@ -2,18 +2,24 @@ module Upsalla
   class Connection
     require "rest-client"
 
-    TEST_URL = "https://wwwcie.ups.com"
-    PRODUCTION_URL = "https://onlinetools.ups.com"
+    TEST_URL = "https://wwwcie.ups.com".freeze
+    PRODUCTION_URL = "https://onlinetools.ups.com".freeze
 
     attr_accessor :api_url, :access_type
 
     def initialize(options = {})
       self.access_type = options[:access_type] || :test
       self.api_url = self.class._api_url_for_access_type access_type
+
+      init_connector_methods
     end
 
-    Upsalla.registered_apis.each do |api|
-
+    def init_connector_methods
+      Upsalla.registered_apis.each do |method_name, connector|
+        define_method method_name do |payload|
+          connector.request payload, api_url
+        end
+      end
     end
 
     class << self

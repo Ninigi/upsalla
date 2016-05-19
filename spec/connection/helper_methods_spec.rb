@@ -19,14 +19,15 @@ describe Upsalla::Connection do
     end
 
     context "when access_type == :test" do
-      it "should return "#{test_url}"" do
+      it "should return '#{test_url}'" do
         expect(described_class._api_url_for_access_type :test).to eq test_url
       end
     end
 
     context "when access_type == :production" do
-      it "should return "#{production_url}"" do
-        expect(described_class._api_url_for_access_type :production).to eq production_url
+      it "should return '#{production_url}'" do
+        expect(described_class._api_url_for_access_type :production).
+          to eq production_url
       end
     end
   end
