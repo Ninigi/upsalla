@@ -2,6 +2,8 @@ require "upsalla/version"
 
 require "upsalla/connection"
 
+require "upsalla/request"
+
 require "connectors/address_validation"
 
 require "parsers/xml_parser"
