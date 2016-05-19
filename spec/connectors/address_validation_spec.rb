@@ -28,7 +28,7 @@ RSpec.describe Upsalla::Connectors::AddressValidation do
       url = [Upsalla::Connection::TEST_URL, described_class.api_uri].join("/")
       stub_request(:post, url)
 
-      p subject.request Upsalla::Connection::TEST_URL, test: "abc"
+      subject.request Upsalla::Connection::TEST_URL, test: "abc"
 
       expect(WebMock).to have_requested(:post, url)
     end

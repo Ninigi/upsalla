@@ -1,6 +1,14 @@
 require "spec_helper"
 
 describe Upsalla::Connection do
+  subject { Upsalla::Connection.new }
+
+  Upsalla.registered_apis.each do |api_name, _connector|
+    it "should initialize the connector ##{api_name}" do
+      expect(subject).to respond_to api_name
+    end
+  end
+
   it "should have access to the API credentials" do
     expect(described_class.api_credentials).to be_a Hash
   end

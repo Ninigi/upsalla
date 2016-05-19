@@ -11,12 +11,12 @@ module Upsalla
       self.access_type = options[:access_type] || :test
       self.api_url = self.class._api_url_for_access_type access_type
 
-      init_connector_methods
+      _init_connector_methods
     end
 
-    def init_connector_methods
-      Upsalla.registered_apis.each do |method_name, connector|
-        class << self
+    def _init_connector_methods
+      class << self
+        Upsalla.registered_apis.each do |method_name, connector|
           define_method method_name do |payload|
             connector.request payload, api_url
           end
