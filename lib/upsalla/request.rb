@@ -1,16 +1,22 @@
 module Upsalla
   class Request
+    require "crack/xml"
+
     attr_accessor :url, :payload, :options, :complete_payload
-    attr_reader :error_message, :request_hash, :response
+    attr_reader :error, :error_message, :request_hash, :response_raw, :response
 
     def initialize(url, options = {})
       self.payload = options.delete(:payload)
       self.url = url
-      self.options = options
+      self.options = options.delete(:options).to_h
 
       _fail_if_missing_attributes
 
-      perform
+      begin
+        perform
+      rescue StandardError => e
+        @error = e
+      end
     end
 
     def perform
@@ -26,14 +32,16 @@ module Upsalla
         payload: complete_payload_xml
       }
 
-      @response = RestClient::Request.execute request_hash.merge(options)
+      @response_raw = RestClient::Request.execute request_hash.merge options
+      @response = Crack::XML.parse response_raw
     end
 
     def _fail_if_missing_attributes
       { payload: payload, url: url }.each do |argument_name, argument|
         if argument.nil?
+          @error = ArgumentError
           @error_message = "missing Argument: #{argument_name}"
-          fail ArgumentError, error_message
+          fail error, error_message
         end
       end
     end
