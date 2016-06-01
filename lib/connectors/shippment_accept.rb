@@ -1,25 +1,25 @@
 module Upsalla
   module Connectors
-    class AddressValidation
+    class ShipmentAccept
       require "rest-client"
 
       attr_accessor :api_uri, :options
       attr_reader :request_object
 
       def initialize(options = {})
-        self.api_uri = options[:address_validation_url] || "ups.app/xml/AV"
+        self.api_uri = options[:address_validation_url] || "ups.app/xml/ShipAccept"
         self.options = options
       end
 
       def request(base_url, payload = {})
         url = [base_url, api_uri].join "/"
         address_validation_payload = {
-          address_validation_request: {
+          shippment_accept_request: {
             request: {
-              request_action: "AV"
-            },
-            address: payload
-          }
+              request_action: "ShipAccept",
+              request_option: 1
+            }
+          }.merge(payload)
         }
 
         request_options = options.merge(response_key: self.class)

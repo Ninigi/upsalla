@@ -1,30 +1,31 @@
 module Upsalla
   module Connectors
-    class AddressValidation
+    class RatingServiceSelection
       require "rest-client"
 
       attr_accessor :api_uri, :options
       attr_reader :request_object
 
       def initialize(options = {})
-        self.api_uri = options[:address_validation_url] || "ups.app/xml/AV"
+        self.api_uri = options[:address_validation_url] || "ups.app/xml/Rate"
         self.options = options
       end
 
       def request(base_url, payload = {})
         url = [base_url, api_uri].join "/"
-        address_validation_payload = {
-          address_validation_request: {
+        rating_payload = {
+          rating_service_selection_request: {
             request: {
-              request_action: "AV"
-            },
-            address: payload
-          }
+              request_action: "Rate",
+              request_option: "Rate"
+            }
+          },
+          shipment: payload
         }
 
         request_options = options.merge(response_key: self.class)
 
-        @request_object = Request.new url, payload: address_validation_payload,
+        @request_object = Request.new url, payload: rating_payload,
                                            options: request_options
 
         request_object

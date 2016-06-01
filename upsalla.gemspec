@@ -34,5 +34,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rest-client", "~> 1.8"
   spec.add_dependency "gyoku", "~> 1.3"
-  spec.add_dependency "crack"
+  spec.add_dependency "crack", "~> 0.4"
 end

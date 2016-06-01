@@ -1,10 +1,16 @@
 require "upsalla/version"
 
+require "helpers/string_helper"
+
+require "exceptions"
+
 require "upsalla/connection"
 
 require "upsalla/request"
 
 require "connectors/address_validation"
+require "connectors/shippment_accept"
+require "connectors/rating_service_selection"
 
 require "parsers/xml_parser"
 require "parsers/credential_parser"

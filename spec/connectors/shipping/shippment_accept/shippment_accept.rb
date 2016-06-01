@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe Upsalla::Connectors::AddressValidation do
+RSpec.describe Upsalla::Connectors::RatingServiceSelection do
   let(:test_credentials) do
     {
       api_user: "TestUser",
@@ -18,13 +18,14 @@ RSpec.describe Upsalla::Connectors::AddressValidation do
   subject { described_class.new }
 
   describe "#api_uri" do
-    it "should return 'ups.app/xml/AV'" do
-      expect(subject.api_uri).to eq "ups.app/xml/AV"
+    it "should return 'ups.app/xml/Rate'" do
+      expect(subject.api_uri).to eq "ups.app/xml/Rate"
     end
   end
 
   describe "#request" do
     let(:url) { [Upsalla::Connection::TEST_URL, subject.api_uri].join("/") }
+
     let!(:request) do
       stub_request(:post, url)
 
