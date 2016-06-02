@@ -1,10 +1,12 @@
 # Upsalla
 
 Upsalla provides a more "rubyish" way to interact with the official UPS APIS (XML-Version).
-Instead of writing lengthy XML (which I personally do not think is readable and/or very intuitive way to handle data), use the provided connectors and pass in
+Instead of writing lengthy XML (which I personally do not think is readable and/or very intuitive way to handle data).
+Use the provided connectors and pass in
 the essential information, or write your own if the API you need is not (yet) provided in the default connectors.
 
-**This gem is still under heavy development, so I would not recommend using it in production!** However, if you want to contribute by writing a connector, reporting a bug, help with the documentation, or just provide (constructive) feedback you are very welcome!
+**This gem is still under heavy development, so I would not recommend using it in production!**
+However, if you want to contribute by writing a connector, reporting a bug, help with the documentation, or just provide (constructive) feedback you are very welcome!
 
 ## Installation
 
@@ -36,7 +38,7 @@ Upsalla.api_user = "UAEandsomestuff"
 Upsalla.api_password = "YourPassword"
 ```
 
-Now you can use the connectors
+Now you can initialize a connector object like this:
 
 ``` ruby
 connection = Upsalla::Connection.new
@@ -91,7 +93,7 @@ request.response
 # => {"RatingServiceSelectionResponse"=>{"Response"=>{"ResponseStatusCode"=>"1", "ResponseStatusDescription"=>"Success"}, "RatedShipment"=>{"Service"=>{"Code"=>"65"}, ...
 ```
 
-or just view the "gist" by calling `request.parsed_response` which will ommit the "ResponseCode" etc. and just show the answers "body"
+or just view the "gist" by calling `request.parsed_response` which will omit the "ResponseCode" etc. and just show the answers "body"
 
 ``` ruby
 request.parsed_response
@@ -104,7 +106,7 @@ Yes, but that would destroy the pun, so I went for "Upsalla", which is like sayi
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/upsalla. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/Ninigi/upsalla. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 
 ## License

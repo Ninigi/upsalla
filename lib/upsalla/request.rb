@@ -1,5 +1,6 @@
 module Upsalla
   class Request
+    require "rest-client"
     require "crack/xml"
     require "parsers/ups_response"
 

@@ -8,6 +8,7 @@ require "upsalla/connection"
 
 require "upsalla/request"
 
+require "connectors/base"
 require "connectors/address_validation"
 require "connectors/shippment_accept"
 require "connectors/rating_service_selection"

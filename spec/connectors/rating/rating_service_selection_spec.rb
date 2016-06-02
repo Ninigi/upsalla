@@ -1,4 +1,4 @@
-equire "spec_helper"
+require "spec_helper"
 
 RSpec.describe Upsalla::Connectors::AddressValidation do
   let(:test_credentials) do
