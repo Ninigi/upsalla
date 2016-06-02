@@ -1,8 +1,10 @@
 # Upsalla
 
-Welcome to your new gem! In this directory, you"ll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/upsalla`. To experiment with that code, run `bin/console` for an interactive prompt.
+Upsalla provides a more "rubyish" way to interact with the official UPS APIS (XML-Version).
+Instead of writing lengthy XML (which I personally do not think is readable and/or very intuitive way to handle data), use the provided connectors and pass in
+the essential information, or write your own if the API you need is not (yet) provided in the default connectors.
 
-TODO: Delete this and the text above, and describe your gem
+**This gem is still under heavy development, so I would not recommend using it in production!** However, if you want to contribute by writing a connector, reporting a bug, help with the documentation, or just provide (constructive) feedback you are very welcome!
 
 ## Installation
 
@@ -22,13 +24,83 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Getting started
 
-## Development
+Require and set up Upsalla with your API credentials
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+``` ruby
+require "upsalla"
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Upsalla.api_key = "YourKey"
+Upsalla.api_user = "UAEandsomestuff"
+Upsalla.api_password = "YourPassword"
+```
+
+Now you can use the connectors
+
+``` ruby
+connection = Upsalla::Connection.new
+```
+
+Connection will set up all registered Connector classes and provide instance methods for them.
+For example, there is a connector class called `RatingServiceSelection`, this will provide you with the `rating_service_selection(payload = {})` method.
+
+``` ruby
+payload = {
+  "Shipper" => {
+    "Address" => {
+      "City" => "Tokyo",
+      "CountryCode" => "JP"
+    }
+  },
+  "ShipTo" => {
+    "Address" => {
+      "PostalCode" => "81377",
+      "CountryCode" => "DE"
+    }
+  },
+  "Service" => {
+    "Code" => "65"
+  },
+  "Package" => {
+    "PackagingType" => {
+      "Code" => "00"
+    },
+    "PackageWeight" => {
+      "UnitOfMeasurement" => {
+        "Code" => "KGS"
+      },
+      "Weight" => "5"
+    },
+    "Dimensions" => {
+      "Length" => "10",
+      "Width" => "5",
+      "Height" => "7"
+    }
+  }
+}
+
+request = connection.rating_service_selection payload
+# => #<Upsalla::Request:0x007ff9313508b8 ...>
+```
+
+Running the connector methods will do a request to the UPS-API and return a request object. You can enter the complete response with `request.response`
+
+``` ruby
+request.response
+# => {"RatingServiceSelectionResponse"=>{"Response"=>{"ResponseStatusCode"=>"1", "ResponseStatusDescription"=>"Success"}, "RatedShipment"=>{"Service"=>{"Code"=>"65"}, ...
+```
+
+or just view the "gist" by calling `request.parsed_response` which will ommit the "ResponseCode" etc. and just show the answers "body"
+
+``` ruby
+request.parsed_response
+# => {"Service"=>{"Code"=>"65"}, "RatedShipmentWarning"=>"Your invoice may vary from the displayed reference rates", "BillingWeight"=>{"UnitOfMeasurement"=>{"Code"=>"KGS"}, "Weight"=>"5.0"}, ...
+```
+
+## You know it's actually "Uppsala", right?
+
+Yes, but that would destroy the pun, so I went for "Upsalla", which is like saying "oops" in german. Since this gem is basically a fun side project for me, I figured it might be fitting more often than not.
 
 ## Contributing
 
@@ -38,4 +110,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
