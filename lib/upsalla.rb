@@ -21,7 +21,8 @@ module Upsalla
   @api_password = ""
 
   @registered_apis = {
-    address_validation: Connectors::AddressValidation
+    address_validation: Connectors::AddressValidation,
+    rating_service_selection: Connectors::RatingServiceSelection
   }
 
   class << self

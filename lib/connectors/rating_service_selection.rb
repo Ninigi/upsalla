@@ -16,8 +16,7 @@ module Upsalla
         rating_payload = {
           rating_service_selection_request: {
             request: {
-              request_action: "Rate",
-              request_option: "Rate"
+              request_action: "Rate"
             }
           },
           shipment: payload
