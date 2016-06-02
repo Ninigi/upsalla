@@ -17,9 +17,9 @@ module Upsalla
           rating_service_selection_request: {
             request: {
               request_action: "Rate"
-            }
-          },
-          shipment: payload
+            },
+            shipment: payload
+          }
         }
 
         request_options = options.merge(response_key: self.class)
